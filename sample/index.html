@@ -1,33 +1,16 @@
 <html>
 <head>
-	<title>Home</title>
-	<!-- <script type="text/javascript" src="http://192.168.0.179/axis2/resources/js/hybrid.Web.Gallery.js"></script> -->
+	<title>Hybrid Web Gallery</title>
 	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js"></script>
-	<script>
-	function detectDevice() {
-		agent = navigator.userAgent;
-		
-		
-		
-		var deviceType = {
-			ios : agent.match(/(iPhone|iPod|iPod)/),
-			blackberry : agent.match(/BlackBerry/),
-			android : agent.match(/Android/),
-			desktop : agent.match(/(MSIE|Chrome|Safari|Firefox)/)
-		}
-		
-		return deviceType;
-	}
-	
-	
-	
-	</script>
 	<style>
-		#mg_bg { position:absolute; background-color:#000; margin:0px; padding:0px; border:none; height:100%; width:100%; top:0 }
+		#mg_bg { position:fixed; top:0; left:0; display:block; background-color:#000; opacity:1; margin:0px; padding:0px; border:none; height:100%; width:100%; z-index:99999999; }
 		#mg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
-		#mg_controller_wrapper { position:absolute; top:50%; display:block; width:100%; background:#cccccc; opacity:0.6; font-size:30px; padding:0 0 0 7px; z-index:98; }
-		#mg_prev_image {float:left; cursor:pointer; color:#fff;}
-		#mg_next_image {float:right; cursor:pointer; color:#fff;}
+		#mg_controller_wrapper { position:absolute; top:50%; display:block; width:100%; opacity:0.6; font-size:30px; z-index:98; }
+		#mg_screen img { position:absolute; top:30%; left:0;}
+		.mg_controller { width:46px; height:46px; background:url('../images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
+		#mg_prev_image {float:left;  margin-left:10px; background-position: 0px -25px; -webkit-background-size: 100px 150px;}
+		#mg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
+		
 	</style>
 </head>
 <body>

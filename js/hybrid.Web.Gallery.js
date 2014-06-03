@@ -67,6 +67,7 @@ function animate(element, delta, duration) {
  */
 var HybridWebGallery = {
 	
+		
 	appendDivElement : function(parent, idStr, styleOptions) {
 		var childElement = document.createElement('div');
 		if(styleOptions != '') childElement.setAttribute('style', styleOptions);
@@ -97,7 +98,6 @@ var HybridWebGallery = {
 		
 		Utility.resize(resultImgElem);
 		galleryScreen.appendChild(resultImgElem);
-		resultImgElem.fadeIn();
 	},
 	
 	moveNext : function() {
@@ -126,7 +126,7 @@ var HybridWebGallery = {
 			if(isMobile) {
 				var imgElements = imgsContainer.getElementsByTagName('img');
 				
-				this.appendDivElement(document.body, 'mg_bg', 'top:0; left:0; z-index:99999999; display:block; position:fixed; opacity:1;');
+				this.appendDivElement(document.body, 'mg_bg', '');
 				var galleryBg = document.getElementById('mg_bg');
 				
 				this.appendDivElement(galleryBg, 'mg_screen', '');
@@ -136,10 +136,12 @@ var HybridWebGallery = {
 				
 				var prev = document.createElement('div');
 				prev.setAttribute('id', 'mg_prev_image');
-				prev.innerHTML = 'prev';
+				prev.setAttribute('class', 'mg_controller');
+				//prev.innerHTML = 'prev';
 				var next = document.createElement('div');
 				next.setAttribute('id', 'mg_next_image');
-				next.innerHTML = 'next';
+				next.setAttribute('class', 'mg_controller');
+				//next.innerHTML = 'next';
 				
 				mgControllerWrapper.appendChild(prev);
 				mgControllerWrapper.appendChild(next);
@@ -164,7 +166,7 @@ var HybridWebGallery = {
 				prev.onclick = this.movePrev;
 				next.onclick = this.moveNext;
 			} else {
-				
+				// TODO Client is Desktop
 			}
 		} else {
 			throw new Error("The container has no child nodes");
