@@ -2,9 +2,26 @@
 <head>
 	<title>Home</title>
 	<!-- <script type="text/javascript" src="http://192.168.0.179/axis2/resources/js/hybrid.Web.Gallery.js"></script> -->
-	<script type="text/javascript" src="../js/hybrid.Gallery.js"></script>
+	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js"></script>
+	<script>
+	function detectDevice() {
+		agent = navigator.userAgent;
+		
+		
+		
+		var deviceType = {
+			ios : agent.match(/(iPhone|iPod|iPod)/),
+			blackberry : agent.match(/BlackBerry/),
+			android : agent.match(/Android/),
+			desktop : agent.match(/(MSIE|Chrome|Safari|Firefox)/)
+		}
+		
+		return deviceType;
+	}
 	
 	
+	
+	</script>
 	<style>
 		#mg_bg { position:absolute; background-color:#000; margin:0px; padding:0px; border:none; height:100%; width:100%; top:0 }
 		#mg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
@@ -29,7 +46,7 @@
 	</div>
 	
 	<script>
-		MobileGallery.initGallery(document.getElementById('imgWrapper'));
+		HybridWebGallery.initGallery(document.getElementById('imgWrapper'));
 	</script>
 
 </body>
