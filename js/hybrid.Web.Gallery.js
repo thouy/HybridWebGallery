@@ -10,8 +10,9 @@ imgUrlArr = new Array();
 
 
 /**
- *
+ * 
  * Utility Object
+ * Define method be used generally
  */
 var Utility = (function(){
 	
@@ -53,11 +54,99 @@ var Utility = (function(){
 })(); // IIFE Pattern
 
 
-
-
-function animate(element, delta, duration) {
-	
+/**
+ * 
+ * Delta Object
+ * Define moving method
+ */
+var Delta = {
+	// Exponent function
+	quadrantic : function(progress, incline){
+		return Math.pow(progress, incline);
+	}
 }
+
+/**
+ * 
+ * MoveUtility Object
+ * Define method for moving/scaling
+ */
+var MoveUtility = {
+	
+	/**
+	 * @parameter
+	 * options = {
+	 * 		duration : number   / Time which you want to contain animation
+	 * 		delta    : function / Moving method identifier (quadrantic)
+	 *		delay    : number   / Interval time (ms)
+	 * 		step     : callback / Animation callback step by step
+	 * }
+	 */
+	animate : function(options) {
+		var start = new Date();
+		var id = setInterval(function() {
+			var timePassed = new Date() - start;
+			var progress = timePassed / options.duration;
+			if (progress > 1)
+				progress = 1;
+			var delta = opts.delta(progress);
+			opts.step(delta);
+			if (progress == 1) {
+		    	clearInterval(id);
+			}
+		}, options.delay || 10);
+	},
+	
+	
+	/**
+	 * @parameter
+	 * element     : Element object which you want to scale
+	 * delta       : Moving method identifier (quadrantic)
+	 * duration    : Time(ms) how long contain animate
+	 * to          : 
+	 * orientation : land(landscape) / port(portrait)
+	 */
+	scale : function(element, delta, duration, to, orientation) {
+		animate({
+			duration : duration,
+			delta : delta,
+			step : function(delta) {
+				if(orientation == "land")
+					element.style.width = to * delta + "px";
+				else if(orientation == "port")
+					element.style.height = to * delta + "px";
+			}
+		})
+	},
+	
+	move : function(element, delta, duration, to, orientation) {
+		animate({
+			duration : duration,
+			delta : delta,
+			step : function(delta) {
+				if(orientation == "land"){
+					element.style.top = to * delta + "px";
+				} else if(orientation == "port") {
+					element.style.left = to * delta + "px";
+				}
+			}
+		});
+	},
+	
+	getOffsetX : function(element) {
+		var bodyRect = document.body.getBoundingClientRect();
+		var elementRect = element.getBoundingClientRect();
+		return bodyRect.left - elementRect.left;
+
+	},
+	
+	getOffsetY : function(element) {
+		var bodyRect = document.body.getBoundingClientRect();
+		var elementRect = element.getBoundingClientRect();
+		return bodyRect.top - elementRect.top;
+	}
+}
+
 
 
 
@@ -67,7 +156,6 @@ function animate(element, delta, duration) {
  */
 var HybridWebGallery = {
 	
-		
 	appendDivElement : function(parent, idStr, styleOptions) {
 		var childElement = document.createElement('div');
 		if(styleOptions != '') childElement.setAttribute('style', styleOptions);
@@ -167,6 +255,7 @@ var HybridWebGallery = {
 				next.onclick = this.moveNext;
 			} else {
 				// TODO Client is Desktop
+				alert("Desktop version will be comming soon.");
 			}
 		} else {
 			throw new Error("The container has no child nodes");
