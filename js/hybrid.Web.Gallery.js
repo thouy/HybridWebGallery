@@ -61,8 +61,8 @@ var Utility = (function(){
  */
 var Delta = {
 	// Exponent function
-	quadrantic : function(progress, incline){
-		return Math.pow(progress, incline);
+	quadrantic : function(progress){
+		return Math.pow(progress, 2);
 	}
 }
 
@@ -83,17 +83,19 @@ var MoveUtility = {
 	 * }
 	 */
 	animate : function(options) {
+		console.log('animate');
 		var start = new Date();
 		var id = setInterval(function() {
 			var timePassed = new Date() - start;
 			var progress = timePassed / options.duration;
 			if (progress > 1)
 				progress = 1;
-			var delta = opts.delta(progress);
-			opts.step(delta);
+			var delta = options.delta(progress);
+			options.step(delta);
 			if (progress == 1) {
 		    	clearInterval(id);
 			}
+			console.log(progress);
 		}, options.delay || 10);
 	},
 	
@@ -120,13 +122,14 @@ var MoveUtility = {
 	},
 	
 	move : function(element, delta, duration, to, orientation) {
-		animate({
+		this.animate({
 			duration : duration,
 			delta : delta,
 			step : function(delta) {
 				if(orientation == "land"){
 					element.style.top = to * delta + "px";
 				} else if(orientation == "port") {
+					console.log('delta' + delta);
 					element.style.left = to * delta + "px";
 				}
 			}
@@ -137,16 +140,49 @@ var MoveUtility = {
 		var bodyRect = document.body.getBoundingClientRect();
 		var elementRect = element.getBoundingClientRect();
 		return bodyRect.left - elementRect.left;
-
 	},
 	
 	getOffsetY : function(element) {
 		var bodyRect = document.body.getBoundingClientRect();
 		var elementRect = element.getBoundingClientRect();
 		return bodyRect.top - elementRect.top;
+	},
+	
+	calculateDegree : function(start, end) {
+		
 	}
 }
 
+
+function calculateAngle(startPoint, endPoint) {
+	var x = startPoint.x - endPoint.x;
+	var y = endPoint.y - startPoint.y;
+	var r = Math.atan2(y, x); //radians
+	var angle = Math.round(r * 180 / Math.PI); //degrees
+
+	//ensure value is positive
+	if (angle < 0) {
+		angle = 360 - Math.abs(angle);
+	}
+
+	return angle;
+}
+
+function calculateDirection(startPoint, endPoint ) {
+	var angle = calculateAngle(startPoint, endPoint);
+
+	if ((angle <= 45) && (angle >= 0)) {
+		return LEFT;
+	} else if ((angle <= 360) && (angle >= 315)) {
+		return LEFT;
+	} else if ((angle >= 135) && (angle <= 225)) {
+		return RIGHT;
+	} else if ((angle > 45) && (angle < 135)) {
+		return DOWN;
+	} else {
+		return UP;
+	}
+}
 
 
 
@@ -249,6 +285,8 @@ var HybridWebGallery = {
 					Utility.resize(this);
 				};
 				
+				this.setTouchEvent(resultImgElem);
+				
 				galleryScreen.appendChild(resultImgElem);
 				
 				prev.onclick = this.movePrev;
@@ -260,7 +298,104 @@ var HybridWebGallery = {
 		} else {
 			throw new Error("The container has no child nodes");
 		}
+	},
+	
+	setTouchEvent : function(element) {
+		
+		element.addEventListener("touchstart", TouchEventCallback.handleStart, false);
+		element.addEventListener("touchend", function(event) {
+			event.preventDefault();
+			var touches = event.changedTouches;
+			var screenWidth = screen.width;
+			for(var i=0; i<touches.length; i++) {
+				var swipedXPos = touches[i].clientX;
+				if(screenWidth/2 > swipedXPos) {
+					console.log('reset position 0');
+					MoveUtility.move(this, Delta.quadrantic, 500, 1, "port");
+				}
+			}
+		}, false);
+		
+		element.addEventListener("touchcancel", TouchEventCallback.handleCancel, false);
+		element.addEventListener("touchmove", function(event) {
+			event.preventDefault();
+			var touches = event.changedTouches;
+			var screenWidth = screen.width;
+			
+			for(var i = 0; i<touches.length; i++) {
+				var swipedXPos = touches[i].clientX;
+				console.log(touches[i].clientX + ' / ' + touches[i].clientY);
+				console.log('element posX = ' + this.style.left);
+				this.style.left = touches[i].clientX;
+			}
+			
+		}, false);
 	}
 };
 	
+
+
+var ongoingTouches = new Array();
+
+/**
+ * 
+ * TouchEventCallback Object
+ */
+var TouchEventCallback = {
+	handleStart : function(event) {
+		event.preventDefault();
+		console.log("touchstart");
+	},
 	
+	handleEnd : function(event) {
+		event.preventDefault();
+		var touches = event.changedTouches;  // List of Touch Object during touchmove event
+		for(var i=0; i<touches.length; i++) {
+			console.log(touches[i].clientX + ' / ' + touches[i].clientY);
+		}
+		console.log("touchend");
+	},
+	
+	handleCancel : function(event) {
+		event.preventDefault();
+		
+		console.log("touchcancel");
+	},
+	
+	handleMove : function(event) {
+		event.preventDefault();
+		var touches = event.changedTouches;  // List of Touch Object during touchmove event
+		for(var i=0; i<touches.length; i++) {
+			var idx = TouchUtility.ongoingTouchIndexById(touches[i].identifier);
+			console.log(touches[i].clientX + ' / ' + touches[i].clientY);
+			if(idx >= 0) {
+				console.log("continuing touch "+idx);
+			}
+		}
+		console.log("touchmove");
+	},
+}
+
+
+/**
+ * 
+ * TouchUtility Object
+ */
+var TouchUtility = (function(){
+	return {
+		
+		copyTouch : function(touch) {
+			return { identifier: touch.identifier, clientX: touch.clientX, clientY: touch.clientY };
+		},
+	
+		ongoingTouchIndexById : function(idToFind) {
+			for (var i=0; i < ongoingTouches.length; i++) {
+				var id = ongoingTouches[i].identifier;	
+				if (id == idToFind) {
+					return i;
+				}
+			}
+			return -1;    // not found
+		}
+	};
+})();
