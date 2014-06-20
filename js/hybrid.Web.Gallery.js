@@ -9,6 +9,7 @@ var screenWidth = 600;
 imgUrlArr = new Array();
 
 
+
 /**
  * 
  * Utility Object
@@ -33,7 +34,7 @@ var Utility = (function(){
 					resizeHeight = maxHeight;
 					resizeWidth = Math.round((width * resizeHeight) / height);
 				}
-			}else{ // 원본이미지가 작거나 같으면
+			} else { // 원본이미지가 작거나 같으면
 				resizeWidth = width;
 				resizeHeight = height;
 			}
@@ -54,6 +55,7 @@ var Utility = (function(){
 })(); // IIFE Pattern
 
 
+
 /**
  * 
  * Delta Object
@@ -65,6 +67,8 @@ var Delta = {
 		return Math.pow(progress, 2);
 	}
 }
+
+
 
 /**
  * 
@@ -83,7 +87,7 @@ var MoveUtility = {
 	 * }
 	 */
 	animate : function(options) {
-		console.log('animate');
+		console.log('animate()');
 		var start = new Date();
 		var id = setInterval(function() {
 			var timePassed = new Date() - start;
@@ -157,10 +161,10 @@ var MoveUtility = {
 function calculateAngle(startPoint, endPoint) {
 	var x = startPoint.x - endPoint.x;
 	var y = endPoint.y - startPoint.y;
-	var r = Math.atan2(y, x); //radians
-	var angle = Math.round(r * 180 / Math.PI); //degrees
+	var r = Math.atan2(y, x); //라디안
+	var angle = Math.round(r * 180 / Math.PI); // 각도
 
-	//ensure value is positive
+	//절대값만 취함
 	if (angle < 0) {
 		angle = 360 - Math.abs(angle);
 	}
@@ -221,6 +225,7 @@ var HybridWebGallery = {
 		resultImgElem.src = imgUrlArr[currentIndex];
 		
 		Utility.resize(resultImgElem);
+		HybridWebGallery.setTouchEvent(resultImgElem);
 		galleryScreen.appendChild(resultImgElem);
 	},
 	
@@ -238,19 +243,17 @@ var HybridWebGallery = {
 		resultImgElem.src = imgUrlArr[currentIndex];
 		
 		Utility.resize(resultImgElem);
+		HybridWebGallery.setTouchEvent(resultImgElem);
 		galleryScreen.appendChild(resultImgElem);
 	},
 	
 	initGallery : function(imgsContainer) {
-		
 		var isMobile = Utility.isMobile();
-		
 		if(imgsContainer.hasChildNodes()) {
-			
 			if(isMobile) {
 				var imgElements = imgsContainer.getElementsByTagName('img');
-				
-				this.appendDivElement(document.body, 'mg_bg', '');
+				alert(screen.width + " / " + screen.height);
+				this.appendDivElement(document.body, 'mg_bg', 'width:' + screen.width + 'px; height:' + screen.height + 'px;');
 				var galleryBg = document.getElementById('mg_bg');
 				
 				this.appendDivElement(galleryBg, 'mg_screen', '');
@@ -289,8 +292,10 @@ var HybridWebGallery = {
 				
 				galleryScreen.appendChild(resultImgElem);
 				
+				// onclick event
 				prev.onclick = this.movePrev;
 				next.onclick = this.moveNext;
+				
 			} else {
 				// TODO Client is Desktop
 				alert("Desktop version will be comming soon.");
@@ -300,102 +305,86 @@ var HybridWebGallery = {
 		}
 	},
 	
+	
+	
+	
 	setTouchEvent : function(element) {
-		
 		element.addEventListener("touchstart", TouchEventCallback.handleStart, false);
-		element.addEventListener("touchend", function(event) {
-			event.preventDefault();
-			var touches = event.changedTouches;
-			var screenWidth = screen.width;
-			for(var i=0; i<touches.length; i++) {
-				var swipedXPos = touches[i].clientX;
-				if(screenWidth/2 > swipedXPos) {
-					console.log('reset position 0');
-					MoveUtility.move(this, Delta.quadrantic, 500, 1, "port");
-				}
-			}
-		}, false);
-		
+		element.addEventListener("touchmove", TouchEventCallback.handleMove, false);
+		element.addEventListener("touchend", TouchEventCallback.handleEnd, false);
 		element.addEventListener("touchcancel", TouchEventCallback.handleCancel, false);
-		element.addEventListener("touchmove", function(event) {
-			event.preventDefault();
-			var touches = event.changedTouches;
-			var screenWidth = screen.width;
-			
-			for(var i = 0; i<touches.length; i++) {
-				var swipedXPos = touches[i].clientX;
-				console.log(touches[i].clientX + ' / ' + touches[i].clientY);
-				console.log('element posX = ' + this.style.left);
-				this.style.left = touches[i].clientX;
-			}
-			
-		}, false);
 	}
 };
 	
 
-
-var ongoingTouches = new Array();
 
 /**
  * 
  * TouchEventCallback Object
  */
 var TouchEventCallback = {
+		
+	swipeDist : 0,
+	startXPos : 0,
+	currentXPos : 0,
+	
 	handleStart : function(event) {
 		event.preventDefault();
-		console.log("touchstart");
+		currentXPos = this.offsetLeft;   // When touch event start, capture current element x position
+		var touches = event.changedTouches;
+		for(var i=0; i<touches.length; i++) {
+			var startX = touches[i].clientX;
+			startXPos = startX;
+			console.log('swipeStart = ' + startXPos);
+		}
 	},
 	
 	handleEnd : function(event) {
 		event.preventDefault();
-		var touches = event.changedTouches;  // List of Touch Object during touchmove event
+		var touches = event.changedTouches;
+		var screenWidth = screen.width;
 		for(var i=0; i<touches.length; i++) {
-			console.log(touches[i].clientX + ' / ' + touches[i].clientY);
+			var endXPos = touches[i].clientX;
+			console.log('swipeEnd = ' + endXPos);
+			console.log('Element position [finish] = ' + this.style.left);
+			if(100 > Math.abs(this.offsetLeft)) {
+				console.log('this.style.left = ' + this.style.left);
+				this.setAttribute('style', 'transition:all 0.5s;');
+				this.style.left = 0;
+				//MoveUtility.move(this, Delta.quadrantic, 1000, 0, "port");
+			} else {
+				
+				if(swipeDist > 0) {
+					HybridWebGallery.movePrev();
+				} else {
+					HybridWebGallery.moveNext();
+				}
+			}
 		}
-		console.log("touchend");
-	},
-	
-	handleCancel : function(event) {
-		event.preventDefault();
-		
-		console.log("touchcancel");
 	},
 	
 	handleMove : function(event) {
 		event.preventDefault();
-		var touches = event.changedTouches;  // List of Touch Object during touchmove event
-		for(var i=0; i<touches.length; i++) {
-			var idx = TouchUtility.ongoingTouchIndexById(touches[i].identifier);
-			console.log(touches[i].clientX + ' / ' + touches[i].clientY);
-			if(idx >= 0) {
-				console.log("continuing touch "+idx);
-			}
+		this.removeAttribute('style');
+		
+		var touches = event.changedTouches;
+		var screenWidth = screen.width;   // Device screen's width
+		console.log(currentXPos);
+		for(var i = 0; i<touches.length; i++) {
+			var swipedXPos = touches[i].clientX;
+			swipeDist = swipedXPos-startXPos;   // Calculate moving distance
+			console.log('Swiped  distance [processing] = ' + swipeDist);
+			console.log('Element position [processing] = ' + this.style.left);
+			if(swipeDist > 0)
+				this.style.left = currentXPos + Math.abs(swipeDist) + "px";  // Image swipe effect
+			else
+				this.style.left = currentXPos - Math.abs(swipeDist) + "px";  // Image swipe effect
 		}
-		console.log("touchmove");
+	},
+	
+	handleCancel : function(event) {
+		event.preventDefault();
+		console.log("touchcancel");
 	},
 }
 
-
-/**
- * 
- * TouchUtility Object
- */
-var TouchUtility = (function(){
-	return {
-		
-		copyTouch : function(touch) {
-			return { identifier: touch.identifier, clientX: touch.clientX, clientY: touch.clientY };
-		},
-	
-		ongoingTouchIndexById : function(idToFind) {
-			for (var i=0; i < ongoingTouches.length; i++) {
-				var id = ongoingTouches[i].identifier;	
-				if (id == idToFind) {
-					return i;
-				}
-			}
-			return -1;    // not found
-		}
-	};
-})();
