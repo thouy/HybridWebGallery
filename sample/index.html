@@ -1,32 +1,46 @@
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Hybrid Web Gallery</title>
-	<script type="text/javascript" src="res/js/hybrid.Web.Gallery.js"></script>
-	
+	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js"></script>
 	<style>
-		#mg_bg { position:absolute; top:0; left:0; display:block; overflow:hidden; background-color:#000; }
-		#mg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
-		#mg_controller_wrapper { position:absolute; top:50%; display:block; width:100%; opacity:0.6; font-size:30px; z-index:98; }
-		#mg_screen img { position:absolute; top:30%; left:0; }
-		.mg_controller { width:46px; height:46px; background:url('res/images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
-		#mg_prev_image {float:left;  margin-left:10px; background-position: 0px -25px; -webkit-background-size: 100px 150px;}
-		#mg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
-		
+	#hg_bg { position:absolute; top:0; left:0; display:block; overflow:hidden; background-color:#000; }
+	#hg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
+	#hg_controller_wrapper { position:absolute; top:49%; display:block; width:100%; opacity:0.6; font-size:30px; z-index:98; }
+	#hg_screen img { position:absolute; top:0; left:0; right:0; bottom:0; margin:auto; }
+	.hg_controller { width:46px; height:46px; background:url('../images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
+	#hg_prev_image {float:left; margin-left:10px; background-position: 0px -25px; -webkit-background-size: 100px 150px;}
+	#hg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
+	.hg_desc_bar { background-color:#dedede; opacity:0.3; height:65px; position: relative; top:90%; padding:15px 0; font-size:25px; }	
+	.hg_index_printer {
+		position:absolute;
+		margin: 50px auto;
+		top:0; right:0; bottom:0; left:0;
+		display:block;
+		border-radius:3em;
+		border:3px solid #dedede;
+		width: 9em;
+		height: 1.7em;
+		padding: 0.9em 0;
+		background-color:#4d4d4d;
+		color:#fff;
+		font-size: 2em; text-align:center; }
 	</style>
 </head>
 <body>
 	<div id="imgWrapper" style="display:none;">
-		<img src="http://lh6.ggpht.com/-bJ9TGHDbHoc/UZvctbwxzvI/AAAAAAAAAcE/x8y_LLUn-fI/w1280/DSC_0342.jpg" alt="nature1"/>
-		<img src="http://lh6.ggpht.com/-3rGsTSbh98s/UXbqb9MQzsI/AAAAAAAAAYo/O-XIShFb5qk/w1280/_DSC0217.jpg" alt="nature1"/>
-		<img src="http://lh4.ggpht.com/-ILOV0kidYx4/UXbqavS7qOI/AAAAAAAAAYg/-gE1gOF3dPk/w1280/_DSC8412.jpg" alt="nature1"/>
-		<img src="http://lh3.ggpht.com/-UGEsiQUak3o/UXrjfd6jeBI/AAAAAAAAAZQ/O6WACxhdSZE/w1280/_DSC0843.jpg" alt="nature1"/>
-		<img src="http://lh5.ggpht.com/-LF1r_W3hO_w/U2JNriAMm1I/AAAAAAAABUI/_0qLENYkRrQ/w1280/DSC_5835.jpg" alt="nature1"/>
-		<img src="http://lh5.ggpht.com/-HiVapCSokDo/UglTuk5RWAI/AAAAAAAAAvM/dVT3Jl49KaA/w1280/DSCN1037.jpg" alt="nature1"/>
-		<img src="http://lh6.ggpht.com/-LLzjXGW22PE/UglTtQAf_vI/AAAAAAAAAvE/p_USeJY-MvQ/w1280/DSC_0188.jpg" alt="nature1"/>
-		<img src="http://lh5.ggpht.com/-1-hqK2pE8sk/UkyFaslGrYI/AAAAAAAAA4o/TELUWhjk7wY/w1280/_DSC8270.jpg" alt="nature1"/>
-		<img src="http://lh5.ggpht.com/-KfR_h7pDYyU/U2OY-4bifHI/AAAAAAAABZA/wv578sgkzow/w1280/DSC_4459.jpg" alt="nature1"/>
-		<img src="http://lh3.ggpht.com/-AoD1th1KGG8/UXbpKGCMCjI/AAAAAAAAAX0/1Q4dJhC9uaI/w1280/_DSC0169.jpg" alt="nature1"/>
-		<img src="http://lh6.ggpht.com/-422wifU6h0g/UZ_Temg0z1I/AAAAAAAAAdE/FBeG56Mr2JQ/w1280/DSC_0297.jpg" alt="nature1"/>
+		<img src="http://lh6.ggpht.com/-bJ9TGHDbHoc/UZvctbwxzvI/AAAAAAAAAcE/x8y_LLUn-fI/w1280/DSC_0342.jpg" alt="nature1" title="정말 큰 나비 사진입니다."/>
+		<img src="http://lh6.ggpht.com/-3rGsTSbh98s/UXbqb9MQzsI/AAAAAAAAAYo/O-XIShFb5qk/w1280/_DSC0217.jpg" alt="nature1" title="황새가 어딘가를 지긋이 바라보고 있네요."/>
+		<img src="http://lh4.ggpht.com/-ILOV0kidYx4/UXbqavS7qOI/AAAAAAAAAYg/-gE1gOF3dPk/w1280/_DSC8412.jpg" alt="nature1" title="pic1"/>
+		<img src="http://lh3.ggpht.com/-UGEsiQUak3o/UXrjfd6jeBI/AAAAAAAAAZQ/O6WACxhdSZE/w1280/_DSC0843.jpg" alt="nature1" title="pic2"/>
+		<img src="http://lh5.ggpht.com/-LF1r_W3hO_w/U2JNriAMm1I/AAAAAAAABUI/_0qLENYkRrQ/w1280/DSC_5835.jpg" alt="nature1" title="pic3"/>
+		<img src="http://lh5.ggpht.com/-HiVapCSokDo/UglTuk5RWAI/AAAAAAAAAvM/dVT3Jl49KaA/w1280/DSCN1037.jpg" alt="nature1" title="pic4"/>
+		<img src="http://lh6.ggpht.com/-LLzjXGW22PE/UglTtQAf_vI/AAAAAAAAAvE/p_USeJY-MvQ/w1280/DSC_0188.jpg" alt="nature1" title="pic5"/>
+		<img src="http://lh5.ggpht.com/-1-hqK2pE8sk/UkyFaslGrYI/AAAAAAAAA4o/TELUWhjk7wY/w1280/_DSC8270.jpg" alt="nature1" title="pic6"/>
+		<img src="http://lh5.ggpht.com/-KfR_h7pDYyU/U2OY-4bifHI/AAAAAAAABZA/wv578sgkzow/w1280/DSC_4459.jpg" alt="nature1" title="pic7"/>
+		<img src="http://lh3.ggpht.com/-AoD1th1KGG8/UXbpKGCMCjI/AAAAAAAAAX0/1Q4dJhC9uaI/w1280/_DSC0169.jpg" alt="nature1" title="pic8"/>
+		<img src="http://lh6.ggpht.com/-422wifU6h0g/UZ_Temg0z1I/AAAAAAAAAdE/FBeG56Mr2JQ/w1280/DSC_0297.jpg" alt="nature1" title="pic9"/>
+		
 	</div>
 	
 	<script>
