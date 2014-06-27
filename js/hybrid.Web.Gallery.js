@@ -15,6 +15,9 @@ var hg_image;
 var hg_desc_box;
 var hg_numbering_box;
 
+var screenWidth;
+var screenHeight;
+
 
 /**
  * 
@@ -26,18 +29,22 @@ var Utility = (function(){
 	// Closure
 	return {
 		resize : function(imgElem) {
+			
+			// image's w/h
 			var width = imgElem.width;
 			var height = imgElem.height;
-			var maxWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-			var maxHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+			console.log(width + '/' + height);
+			
 			var resizeWidth;
 			var resizeHeight;
-			if(width > maxWidth || height > maxHeight){ // 원본이미지가 크면 
+			if(width > screenWidth || height > screenHeight){ // 원본이미지가 크면 
 				if(width > height){
-					resizeWidth = maxWidth;
+					alert("width bigger");
+					resizeWidth = screenWidth;
 					resizeHeight = Math.round((height * resizeWidth) / width);
 				} else {
-					resizeHeight = maxHeight;
+					alert("height bigger");
+					resizeHeight = screenHeight;
 					resizeWidth = Math.round((width * resizeHeight) / height);
 				}
 			} else { // 원본이미지가 작거나 같으면
@@ -227,6 +234,7 @@ var HybridWebGallery = {
 		resize(hg_image);
 	},
 	
+	// move previous
 	movePrev : function() {
 		if(currentIndex == 0) {
 			currentIndex = imgUrlArr.length - 1;
@@ -235,15 +243,19 @@ var HybridWebGallery = {
 		}
 		console.log('currentIndex = ' + currentIndex);
 		
+		hg_image.removeAttribute('width');
+		hg_image.removeAttribute('height');
 		hg_image.src = imgUrlArr[currentIndex];
+		Utility.resize(hg_image);
 		hg_image.style.left = 0;
 		
-		Utility.resize(hg_image);
+		
 		
 		hg_desc_box.innerHTML = imgDesc[currentIndex];
 		hg_numbering_box.innerHTML =  (currentIndex + 1) + ' / ' + totalIndexNum;
 	},
 	
+	// move next
 	moveNext : function() {
 		if(currentIndex == imgUrlArr.length - 1){
 			currentIndex = 0;
@@ -252,10 +264,13 @@ var HybridWebGallery = {
 		}
 		console.log('currentIndex = ' + currentIndex);
 		
+		hg_image.removeAttribute('width');
+		hg_image.removeAttribute('height');
 		hg_image.src = imgUrlArr[currentIndex];
+		Utility.resize(hg_image);
 		hg_image.style.left = 0;
 		
-		Utility.resize(hg_image);
+		
 
 		hg_desc_box.innerHTML = imgDesc[currentIndex];
 		hg_numbering_box.innerHTML =  (currentIndex + 1) + ' / ' + totalIndexNum;
@@ -268,8 +283,8 @@ var HybridWebGallery = {
 			if(isMobile) {
 				
 				// Get device's screen width and height value
-				var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-				var height = (window.innerWidth > 0) ? window.innerHeight : screen.height;
+				screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+				screenHeight = (window.innerWidth > 0) ? window.innerHeight : screen.height;
 				
 				// Read image info from '<img>' tag list
 				var imgElements = imgsContainer.getElementsByTagName('img');
@@ -281,7 +296,7 @@ var HybridWebGallery = {
 					imgDesc[i] = imgElements[i].title;
 				}
 				
-				_this.appendDivElement(document.body, 'hg_bg', 'width:' + width + 'px; height:' + height + 'px;');
+				_this.appendDivElement(document.body, 'hg_bg', 'width:' + screenWidth + 'px; height:' + screenHeight + 'px;');
 				hg_background_pane = document.getElementById('hg_bg');
 				_this.appendDivElement(hg_background_pane, 'hg_screen', '');
 				
@@ -305,23 +320,23 @@ var HybridWebGallery = {
 				
 				hg_background_pane.appendChild(hgControllerWrapper);
 				
-				
-				
-				//this.setImage(imgUrlArr[currentIndex]);
 				hg_gallery_screen = document.getElementById('hg_screen');
 				
+				// description box setting
 				hg_desc_box = document.createElement('div');
 				hg_desc_box.id = 'hg_desc_bar';
 				hg_desc_box.className = 'hg_desc_bar';
 				hg_desc_box.innerHTML = imgDesc[currentIndex];
 				hg_gallery_screen.appendChild(hg_desc_box);
 				
+				// numbering box setting
 				hg_numbering_box = document.createElement('div');
 				hg_numbering_box.id = 'hg_index_printer';
 				hg_numbering_box.className = 'hg_index_printer';
 				hg_numbering_box.innerHTML =  (currentIndex + 1) + ' / ' + totalIndexNum;
 				hg_gallery_screen.appendChild(hg_numbering_box);
 				
+				// <img> tag setting
 				hg_image = document.createElement('img');
 				hg_image.id = 'hg_gallery_item';
 				hg_image.src = imgUrlArr[currentIndex];
@@ -331,8 +346,6 @@ var HybridWebGallery = {
 				this.setTouchEvent(hg_image);
 				hg_gallery_screen.appendChild(hg_image);
 
-				
-				
 				// onclick event
 				prev.onclick = this.movePrev;
 				next.onclick = this.moveNext;
@@ -385,7 +398,7 @@ var TouchEventCallback = {
 			var endXPos = touches[i].clientX;
 			console.log('swipeEnd = ' + endXPos);
 			console.log('Element position [finish] = ' + this.style.left);
-			if(100 > Math.abs(this.offsetLeft)) {
+			if(60 > Math.abs(this.offsetLeft)) {
 				console.log('this.style.left = ' + this.style.left);
 				this.setAttribute('style', 'transition:all 0.5s;');
 				this.style.left = 0;

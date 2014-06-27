@@ -2,7 +2,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>Hybrid Web Gallery</title>
-	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js"></script>
+	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js?ver=140627"></script>
 	<style>
 	#hg_bg { position:absolute; top:0; left:0; display:block; overflow:hidden; background-color:#000; }
 	#hg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
@@ -11,12 +11,23 @@
 	.hg_controller { width:46px; height:46px; background:url('../images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
 	#hg_prev_image {float:left; margin-left:10px; background-position: 0px -25px; -webkit-background-size: 100px 150px;}
 	#hg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
-	.hg_desc_bar { background-color:#dedede; opacity:0.3; height:65px; position: relative; top:90%; padding:15px 0; font-size:25px; }	
+	.hg_desc_bar {
+		background-color:#4d4d4d;
+		height:12em;
+		position: relative;
+		top:90%;
+		opacity:0.7;
+		padding:1.2em 0;
+		font-size:2.5em;
+		color:#fff;
+		z-index:98;
+	}	
 	.hg_index_printer {
 		position:absolute;
 		margin: 50px auto;
 		top:0; right:0; bottom:0; left:0;
 		display:block;
+		opacity:0.7;
 		border-radius:3em;
 		border:3px solid #dedede;
 		width: 9em;
@@ -24,14 +35,24 @@
 		padding: 0.9em 0;
 		background-color:#4d4d4d;
 		color:#fff;
-		font-size: 2em; text-align:center; }
+		font-size: 2em; text-align:center; z-index:98; }
 	</style>
+	<script>
+		// 모바일에서 주소창 숨기기
+		window.addEventListener('load', function() {
+			// body의 height를 살짝 늘리는 코드
+			document.body.style.height = (document.documentElement.clientHeight) + 'px';
+			// scroll를 제어 하는 코드
+			setTimeout(scrollTo, 0, 0, 1);
+		}, false);
+	
+	</script>
 </head>
 <body>
 	<div id="imgWrapper" style="display:none;">
 		<img src="http://lh6.ggpht.com/-bJ9TGHDbHoc/UZvctbwxzvI/AAAAAAAAAcE/x8y_LLUn-fI/w1280/DSC_0342.jpg" alt="nature1" title="정말 큰 나비 사진입니다."/>
 		<img src="http://lh6.ggpht.com/-3rGsTSbh98s/UXbqb9MQzsI/AAAAAAAAAYo/O-XIShFb5qk/w1280/_DSC0217.jpg" alt="nature1" title="황새가 어딘가를 지긋이 바라보고 있네요."/>
-		<img src="http://lh4.ggpht.com/-ILOV0kidYx4/UXbqavS7qOI/AAAAAAAAAYg/-gE1gOF3dPk/w1280/_DSC8412.jpg" alt="nature1" title="pic1"/>
+		<img src="http://lh4.ggpht.com/-ILOV0kidYx4/UXbqavS7qOI/AAAAAAAAAYg/-gE1gOF3dPk/w1280/_DSC8412.jpg" alt="nature1" title="상어 두마리"/>
 		<img src="http://lh3.ggpht.com/-UGEsiQUak3o/UXrjfd6jeBI/AAAAAAAAAZQ/O6WACxhdSZE/w1280/_DSC0843.jpg" alt="nature1" title="pic2"/>
 		<img src="http://lh5.ggpht.com/-LF1r_W3hO_w/U2JNriAMm1I/AAAAAAAABUI/_0qLENYkRrQ/w1280/DSC_5835.jpg" alt="nature1" title="pic3"/>
 		<img src="http://lh5.ggpht.com/-HiVapCSokDo/UglTuk5RWAI/AAAAAAAAAvM/dVT3Jl49KaA/w1280/DSCN1037.jpg" alt="nature1" title="pic4"/>
@@ -40,7 +61,54 @@
 		<img src="http://lh5.ggpht.com/-KfR_h7pDYyU/U2OY-4bifHI/AAAAAAAABZA/wv578sgkzow/w1280/DSC_4459.jpg" alt="nature1" title="pic7"/>
 		<img src="http://lh3.ggpht.com/-AoD1th1KGG8/UXbpKGCMCjI/AAAAAAAAAX0/1Q4dJhC9uaI/w1280/_DSC0169.jpg" alt="nature1" title="pic8"/>
 		<img src="http://lh6.ggpht.com/-422wifU6h0g/UZ_Temg0z1I/AAAAAAAAAdE/FBeG56Mr2JQ/w1280/DSC_0297.jpg" alt="nature1" title="pic9"/>
-		
+		<img src="http://devlibrary.net/images/msmk/1.jpg" title="남산 아경1"/>
+		<img src="../images/msmk/2.jpg" title="남산 아경2"/>
+		<img src="../images/msmk/3.jpg" title="압구정 블랙스미스에서 머리하구~"/>
+		<img src="../images/msmk/4.jpg" title="압구정 블랙스미스에서 머리하구~"/>
+		<img src="../images/msmk/5.jpg" title=""/>
+		<img src="../images/msmk/6.jpg" title="L.O.V.E"/>
+		<img src="../images/msmk/7.jpg" title="잉꼬"/>
+		<img src="../images/msmk/8.jpg" title="양떼목장~!"/>
+		<img src="../images/msmk/9.jpg" title=""/>
+		<img src="../images/msmk/10.jpg" title=""/>
+		<img src="../images/msmk/11.jpg" title=""/>
+		<img src="../images/msmk/12.jpg" title=""/>
+		<img src="../images/msmk/13.jpg" title=""/>
+		<img src="../images/msmk/14.jpg" title=""/>
+		<img src="../images/msmk/15.jpg" title=""/>
+		<img src="../images/msmk/16.jpg" title=""/>
+		<img src="../images/msmk/17.jpg" title=""/>
+		<img src="../images/msmk/18.jpg" title=""/>
+		<img src="../images/msmk/19.jpg" title=""/>
+		<img src="../images/msmk/20.jpg" title=""/>
+		<img src="../images/msmk/21.jpg" title=""/>
+		<img src="../images/msmk/22.jpg" title=""/>
+		<img src="../images/msmk/23.jpg" title=""/>
+		<img src="../images/msmk/24.jpg" title=""/>
+		<img src="../images/msmk/25.jpg" title=""/>
+		<img src="../images/msmk/26.jpg" title=""/>
+		<img src="../images/msmk/27.jpg" title=""/>
+		<img src="../images/msmk/28.jpg" title=""/>
+		<img src="../images/msmk/29.jpg" title=""/>
+		<img src="../images/msmk/30.jpg" title=""/>
+		<img src="../images/msmk/31.jpg" title=""/>
+		<img src="../images/msmk/32.jpg" title=""/>
+		<!-- <img src="../images/msmk/33.jpeg" title=""/>  -->
+		<img src="../images/msmk/34.jpeg" title=""/>
+		<img src="../images/msmk/35.jpeg" title=""/>
+		<img src="../images/msmk/36.jpeg" title=""/>
+		<img src="../images/msmk/37.jpeg" title=""/>
+		<img src="../images/msmk/38.jpeg" title=""/>
+		<img src="../images/msmk/39.jpeg" title=""/>
+		<img src="../images/msmk/40.jpeg" title=""/>
+		<img src="../images/msmk/41.jpeg" title=""/>
+		<img src="../images/msmk/42.jpeg" title=""/>
+		<img src="../images/msmk/43.jpeg" title=""/>
+		<img src="../images/msmk/44.jpeg" title=""/>
+		<img src="../images/msmk/45.jpeg" title=""/>
+		<img src="../images/msmk/46.jpeg" title=""/>
+		<img src="../images/msmk/47.jpeg" title=""/>
+		<img src="../images/msmk/48.jpeg" title=""/>
 	</div>
 	
 	<script>
