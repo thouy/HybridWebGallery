@@ -1,11 +1,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="user-scalable=0"> <!-- mobile full screen -->
 	<title>Hybrid Web Gallery</title>
-	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js?ver=140627"></script>
+	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js?ver=140630"></script>
 	<style>
 	#hg_bg { position:absolute; top:0; left:0; display:block; overflow:hidden; background-color:#000; }
-	#hg_screen { vertical-align:middle; top:50%; height:100%; width:100%; background-size:contain; text-align:center; }
+	#hg_screen { vertical-align:middle; top:45%; height:100%; width:100%; background-size:contain; text-align:center; }
 	#hg_controller_wrapper { position:absolute; top:49%; display:block; width:100%; opacity:0.6; font-size:30px; z-index:98; }
 	#hg_screen img { position:absolute; top:0; left:0; right:0; bottom:0; margin:auto; }
 	.hg_controller { width:46px; height:46px; background:url('../images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
@@ -13,40 +14,31 @@
 	#hg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
 	.hg_desc_bar {
 		background-color:#4d4d4d;
-		height:12em;
+		height:30px;
 		position: relative;
 		top:90%;
 		opacity:0.7;
-		padding:1.2em 0;
-		font-size:2.5em;
+		padding:17px 0;
+		font-size:12px;
 		color:#fff;
 		z-index:98;
-	}	
+	}
+	
 	.hg_index_printer {
 		position:absolute;
-		margin: 50px auto;
+		margin: 30px auto;
 		top:0; right:0; bottom:0; left:0;
 		display:block;
 		opacity:0.7;
-		border-radius:3em;
-		border:3px solid #dedede;
-		width: 9em;
-		height: 1.7em;
-		padding: 0.9em 0;
+		border-radius:10px;
+		border:1px solid #dedede;
+		width: 47px;
+		height: 16px;
+		padding: 10px 0;
 		background-color:#4d4d4d;
 		color:#fff;
-		font-size: 2em; text-align:center; z-index:98; }
+		font-size: 12px; text-align:center; z-index:98; }
 	</style>
-	<script>
-		// 모바일에서 주소창 숨기기
-		window.addEventListener('load', function() {
-			// body의 height를 살짝 늘리는 코드
-			document.body.style.height = (document.documentElement.clientHeight) + 'px';
-			// scroll를 제어 하는 코드
-			setTimeout(scrollTo, 0, 0, 1);
-		}, false);
-	
-	</script>
 </head>
 <body>
 	<div id="imgWrapper" style="display:none;">
