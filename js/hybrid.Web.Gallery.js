@@ -30,31 +30,30 @@ var Utility = (function(){
 	return {
 		resize : function(imgElem) {
 			
-			// image's w/h
+			// Get image's width and height value
 			var width = imgElem.width;
 			var height = imgElem.height;
 			console.log(width + '/' + height);
 			
 			var resizeWidth;
 			var resizeHeight;
-			if(width > screenWidth || height > screenHeight){ // 원본이미지가 크면 
+			if(width > screenWidth || height > screenHeight) { // When image size bigger than device screen 
 				if(width > height){
-					alert("width bigger");
 					resizeWidth = screenWidth;
 					resizeHeight = Math.round((height * resizeWidth) / width);
 				} else {
-					alert("height bigger");
 					resizeHeight = screenHeight;
 					resizeWidth = Math.round((width * resizeHeight) / height);
 				}
-			} else { // 원본이미지가 작거나 같으면
+			} else { // When image size smaller than device screen
 				resizeWidth = width;
 				resizeHeight = height;
 			}
 			imgElem.width = resizeWidth;
 			imgElem.height = resizeHeight;
 		},
-	
+		
+		// Check if current device is mobile
 		isMobile : function() {
 			var result = null;
 			var agent = navigator.userAgent;
@@ -65,6 +64,7 @@ var Utility = (function(){
 			return result;
 		},
 		
+		// Get current browser vendor prefix 
 		getBrowserVendorPrefix : function() {
 			var body = document.body || document.documentElement;
 			var style = body.style;
@@ -103,7 +103,6 @@ var Delta = {
  * Define method for moving/scaling
  */
 var MoveUtility = {
-	
 	/**
 	 * @parameter
 	 * options = {
@@ -191,7 +190,7 @@ function calculateAngle(startPoint, endPoint) {
 	var r = Math.atan2(y, x); //라디안
 	var angle = Math.round(r * 180 / Math.PI); // 각도
 
-	//절대값만 취함
+	// Take unsigned number
 	if (angle < 0) {
 		angle = 360 - Math.abs(angle);
 	}
@@ -221,7 +220,8 @@ function calculateDirection(startPoint, endPoint ) {
  * HybridWebGallery Object
  */
 var HybridWebGallery = {
-	
+
+	// Append <div> element to parent element
 	appendDivElement : function(parent, idStr, styleOptions) {
 		var childElement = document.createElement('div');
 		if(styleOptions != '') childElement.setAttribute('style', styleOptions);
@@ -234,7 +234,7 @@ var HybridWebGallery = {
 		resize(hg_image);
 	},
 	
-	// move previous
+	// Move previous
 	movePrev : function() {
 		if(currentIndex == 0) {
 			currentIndex = imgUrlArr.length - 1;
@@ -247,16 +247,18 @@ var HybridWebGallery = {
 		hg_image.removeAttribute('height');
 		hg_image.src = imgUrlArr[currentIndex];
 		Utility.resize(hg_image);
+
+		//hg_image.style.transition = 'all 1.0s;';
 		hg_image.style.left = 0;
-		
-		
 		
 		hg_desc_box.innerHTML = imgDesc[currentIndex];
 		hg_numbering_box.innerHTML =  (currentIndex + 1) + ' / ' + totalIndexNum;
 	},
 	
-	// move next
+	// Move next
 	moveNext : function() {
+		
+		
 		if(currentIndex == imgUrlArr.length - 1){
 			currentIndex = 0;
 		} else {
@@ -268,13 +270,14 @@ var HybridWebGallery = {
 		hg_image.removeAttribute('height');
 		hg_image.src = imgUrlArr[currentIndex];
 		Utility.resize(hg_image);
+		
+		//hg_image.setAttribute('style', 'opacity 1.0s;');
 		hg_image.style.left = 0;
 		
-		
-
 		hg_desc_box.innerHTML = imgDesc[currentIndex];
 		hg_numbering_box.innerHTML =  (currentIndex + 1) + ' / ' + totalIndexNum;
 	},
+	
 	
 	initGallery : function(imgsContainer) {
 		var isMobile = Utility.isMobile();
@@ -394,20 +397,17 @@ var TouchEventCallback = {
 		event.preventDefault();
 		var touches = event.changedTouches;
 		var screenWidth = screen.width;
+		
 		for(var i=0; i<touches.length; i++) {
 			var endXPos = touches[i].clientX;
+			this.style.left = -screenWidth;
 			console.log('swipeEnd = ' + endXPos);
 			console.log('Element position [finish] = ' + this.style.left);
 			if(60 > Math.abs(this.offsetLeft)) {
 				console.log('this.style.left = ' + this.style.left);
-				this.setAttribute('style', 'transition:all 0.5s;');
 				this.style.left = 0;
-				this.addEventListener("transitionend", function() {
-					console.log(this);
-				}.bind(this));
-				//MoveUtility.move(this, Delta.quadrantic, 1000, 0, "port");
 			} else {
-				if(swipeDist > 0) {
+				if(swipeDist > 0) {  // previous
 					HybridWebGallery.movePrev();
 				} else {
 					HybridWebGallery.moveNext();
