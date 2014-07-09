@@ -258,8 +258,7 @@ var HybridWebGallery = {
 	// Move next
 	moveNext : function() {
 		
-		
-		if(currentIndex == imgUrlArr.length - 1){
+		if(currentIndex == imgUrlArr.length - 1) {
 			currentIndex = 0;
 		} else {
 			currentIndex++;
@@ -353,6 +352,18 @@ var HybridWebGallery = {
 				prev.onclick = this.movePrev;
 				next.onclick = this.moveNext;
 				
+				//hgControllerWrapper.style.opacity = "0";
+				
+				hg_image.onmouseenter = function(){
+					prev.style.opacity = "1";
+					next.style.opacity = "1";
+				};
+				
+				hg_image.onmouseleave = function(){
+					prev.style.opacity = "0";
+					next.style.opacity = "0";
+				};
+				
 			} else {
 				// TODO Client is Desktop
 				alert("Desktop version will be comming soon.");
@@ -397,14 +408,15 @@ var TouchEventCallback = {
 		event.preventDefault();
 		var touches = event.changedTouches;
 		var screenWidth = screen.width;
-		
+		console.log("screen width = " + screenWidth);
 		for(var i=0; i<touches.length; i++) {
 			var endXPos = touches[i].clientX;
-			this.style.left = -screenWidth;
+			//this.style.left = -screenWidth;
 			console.log('swipeEnd = ' + endXPos);
 			console.log('Element position [finish] = ' + this.style.left);
-			if(60 > Math.abs(this.offsetLeft)) {
-				console.log('this.style.left = ' + this.style.left);
+			
+			var swipedDistance = Math.abs(MoveUtility.getOffsetX(this));
+			if(80 > swipedDistance) {
 				this.style.left = 0;
 			} else {
 				if(swipeDist > 0) {  // previous
@@ -426,8 +438,8 @@ var TouchEventCallback = {
 		for(var i = 0; i<touches.length; i++) {
 			var swipedXPos = touches[i].clientX;
 			swipeDist = swipedXPos-startXPos;   // Calculate moving distance
-			console.log('Swiped  distance [processing] = ' + swipeDist);
-			console.log('Element position [processing] = ' + this.style.left);
+			//console.log('Swiped  distance [processing] = ' + swipeDist);
+			//console.log('Element position [processing] = ' + this.style.left);
 			if(swipeDist > 0)
 				this.style.left = currentXPos + Math.abs(swipeDist) + "px";  // Image swipe effect
 			else
@@ -439,4 +451,19 @@ var TouchEventCallback = {
 		event.preventDefault();
 		console.log("touchcancel");
 	},
+	
+	handleEnter : function(event) {
+		event.preventDefault();
+		var controllerUI = document.getElementById('hg_controller_wrapper');
+	},
+	
+	handleLeave : function(event) {
+		event.preventDefault();
+		var timout = setTimeout(function(){
+			var controllerUI = document.getElementById('hg_controller_wrapper');
+			for(var i=100; i<=0; i--) {
+				controllerUI.style.opacity = i / 100;
+			}
+		}, 1000);
+	}
 }
