@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="user-scalable=0"> <!-- mobile full screen -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0," />
 	<title>Hybrid Web Gallery</title>
 	<script type="text/javascript" src="../js/hybrid.Web.Gallery.js?ver=140630"></script>
 	<style>
@@ -9,7 +9,18 @@
 	#hg_screen { vertical-align:middle; top:45%; height:100%; width:100%; background-size:contain; text-align:center; }
 	#hg_controller_wrapper { position:absolute; top:49%; display:block; width:100%; opacity:0.6; font-size:30px; z-index:98; }
 	#hg_screen img { position:absolute; top:0; left:0; right:0; bottom:0; margin:auto; }
-	.hg_controller { width:46px; height:46px; background:url('../images/sprite_btn.png') no-repeat 0 0; color:transparent; cursor:pointer; }
+	
+	.hg_controller { 
+		width:46px; height:46px;
+		background:url('../images/sprite_btn.png') no-repeat 0 0;
+		color:transparent;
+		cursor:pointer;
+		-webkit-transition: all 0.7s ease;
+		-moz-transition: all 0.7s ease;
+		-ms-transition: all 0.7s ease;
+		-o-transition: all 0.7s ease;
+		transition: all 0.7s ease;
+	}
 	#hg_prev_image {float:left; margin-left:10px; background-position: 0px -25px; -webkit-background-size: 100px 150px;}
 	#hg_next_image {float:right; margin-right:10px; background-position:-50px -25px; -webkit-background-size: 100px 150px;}
 	.hg_desc_bar {
@@ -38,7 +49,14 @@
 		background-color:#4d4d4d;
 		color:#fff;
 		font-size: 12px; text-align:center; z-index:98; }
+	
+	
 	</style>
+	<script>
+		screen.onorientationchange = function() {
+			location.reload();
+		}
+	</script>
 </head>
 <body>
 	<div id="imgWrapper" style="display:none;">
